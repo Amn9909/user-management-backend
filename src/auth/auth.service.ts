@@ -29,6 +29,8 @@ export class AuthService {
     const userData = await this.userDetailRepo.findOne({ where: { email: loginData?.email, password: loginData?.password } })
     if (!userData) {
       throw new HttpException('Wrong credentials try again', HttpStatus.BAD_REQUEST)
+    } else if (userData?.active === false) {
+      throw new HttpException('User is not active yet, please contact customer support', HttpStatus.BAD_REQUEST)
     } else {
       try {
         let token
